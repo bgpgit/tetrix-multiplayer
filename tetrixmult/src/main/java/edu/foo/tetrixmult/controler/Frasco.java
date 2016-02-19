@@ -26,7 +26,7 @@ public class Frasco {
 		return tamanoY;
 	}
 
-	public Boolean getEstaLleano() {
+	public Boolean getEstaLleno() {
 		return estaLleano;
 	}
 
@@ -35,6 +35,7 @@ public class Frasco {
 			throw new IllegalArgumentException("La pastilla ingresada no esta dentro del frasco " + pastilla);
 		}
 		pastillas.add(pastilla);
+		pastilla.setFrasco(this);
 	}
 
 	public Pastilla getPastillaEnMovimiento() {
