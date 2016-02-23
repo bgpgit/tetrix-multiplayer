@@ -7,7 +7,6 @@ public class Pastilla {
 	private Short posicionX;
 	private Short posicionY;
 	private Boolean estaMoviendose;
-	private Frasco frasco;
 
 	public Pastilla(Short posicionX, Short posicionY) {
 		if (posicionX < 0 || posicionY < 0) {
@@ -46,7 +45,7 @@ public class Pastilla {
 	}
 
 	public void moverAbajo() {
-		if (estaMoviendose) {
+		if (estaMoviendose && posicionY != 0) {
 			posicionY--;
 		}
 	}
@@ -58,13 +57,9 @@ public class Pastilla {
 	}
 
 	public void moverIzquierda() {
-		if (estaMoviendose) {
+		if (estaMoviendose && posicionX != 0) {
 			posicionX--;
 		}
-	}
-
-	public void setFrasco(Frasco frasco) {
-		this.frasco = frasco;
 	}
 
 	@Override

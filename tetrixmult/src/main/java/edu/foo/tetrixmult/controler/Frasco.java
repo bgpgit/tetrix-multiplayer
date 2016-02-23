@@ -35,7 +35,6 @@ public class Frasco {
 			throw new IllegalArgumentException("La pastilla ingresada no esta dentro del frasco " + pastilla);
 		}
 		pastillas.add(pastilla);
-		pastilla.setFrasco(this);
 	}
 
 	public Pastilla getPastillaEnMovimiento() {
@@ -45,6 +44,10 @@ public class Frasco {
 			}
 		}
 		return null;
+	}
+
+	public List<Pastilla> getPastillas() {
+		return pastillas;
 	}
 
 }
