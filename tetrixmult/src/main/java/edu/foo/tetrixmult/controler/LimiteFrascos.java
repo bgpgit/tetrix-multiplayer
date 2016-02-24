@@ -13,7 +13,7 @@ public class LimiteFrascos implements Regla {
 			if (pastilla.getPosicion().getPosicionY() > frasco.getTamanoY()) {
 				pastilla.regresarPosicion();
 			}
-			if (pastilla.getPosicion().getPosicionX() == 0) {
+			if (pastilla.getPosicion().getPosicionY() == 0) {
 				pastilla.detenerPastilla();
 			}
 		}
