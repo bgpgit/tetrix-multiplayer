@@ -1,5 +1,6 @@
 package edu.foo.tetrixmult.controler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Partida {
@@ -8,9 +9,13 @@ public class Partida {
 	private Boolean estaTerminada;
 	private Jugador ganador;
 
-	public Partida(List<Jugador> jugadores) {
-		this.jugadores = jugadores;
+	public Partida() {
+		this.jugadores = new ArrayList<Jugador>();
 		this.estaTerminada = Boolean.FALSE;
+	}
+
+	public void agregarJugador(Jugador jugador) {
+		jugadores.add(jugador);
 	}
 
 	public List<Jugador> getJugadores() {

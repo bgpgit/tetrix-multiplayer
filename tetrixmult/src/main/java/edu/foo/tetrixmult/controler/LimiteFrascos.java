@@ -7,11 +7,14 @@ public class LimiteFrascos implements Regla {
 		for (Jugador jugador : partida.getJugadores()) {
 			Frasco frasco = jugador.getFrasco();
 			Pastilla pastilla = frasco.getPastillaEnMovimiento();
-			while (pastilla.getPosicionX() > frasco.getTamanoX()) {
-				pastilla.moverIzquierda();
+			if (pastilla.getPosicion().getPosicionX() > frasco.getTamanoX()) {
+				pastilla.regresarPosicion();
 			}
-			while (pastilla.getPosicionY() > frasco.getTamanoY()) {
-				pastilla.moverAbajo();
+			if (pastilla.getPosicion().getPosicionY() > frasco.getTamanoY()) {
+				pastilla.regresarPosicion();
+			}
+			if (pastilla.getPosicion().getPosicionX() == 0) {
+				pastilla.detenerPastilla();
 			}
 		}
 

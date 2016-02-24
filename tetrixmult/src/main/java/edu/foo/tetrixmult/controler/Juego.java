@@ -10,9 +10,9 @@ public class Juego {
 	private Partida partidaActual;
 	private List<Regla> reglas;
 
-	public Juego(List<Jugador> jugadores) {
+	public Juego() {
 		this.listaPartidasAnteriores = new ArrayList<Partida>();
-		this.partidaActual = new Partida(jugadores);
+		this.partidaActual = new Partida();
 		this.reglas = generarListaReglas();
 	}
 
@@ -25,7 +25,7 @@ public class Juego {
 			if (listaPartidasAnteriores.size() == CANTIDAD_MAXIMA_PARTIDAS) {
 				return;
 			} else {
-				partidaActual = new Partida(partidaActual.getJugadores());
+				partidaActual = new Partida();
 			}
 		}
 	}

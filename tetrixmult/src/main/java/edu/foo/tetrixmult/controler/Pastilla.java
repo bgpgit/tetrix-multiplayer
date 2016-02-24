@@ -3,67 +3,90 @@ package edu.foo.tetrixmult.controler;
 public class Pastilla {
 
 	private static Short ultimoIdGenerado = new Short((short) 0);
-	private Short id;
-	private Short posicionX;
-	private Short posicionY;
+	private short id;
+	private Posicion posicion;
+	private Posicion posicionAnterior;
+	private ColorPastilla color;
 	private Boolean estaMoviendose;
 
-	public Pastilla(Short posicionX, Short posicionY) {
-		if (posicionX < 0 || posicionY < 0) {
-			throw new IllegalArgumentException(
-					"Posicion invalida, [posicionX=" + posicionX + "] [posicionY=" + posicionY + "]");
-		}
+	public Pastilla(ColorPastilla color, Posicion posicion) {
 		id = obtenerIdPastilla();
 		estaMoviendose = Boolean.TRUE;
-		this.posicionX = posicionX;
-		this.posicionY = posicionY;
+		this.posicion = posicion;
+		this.color = color;
 	}
 
-	private static synchronized Short obtenerIdPastilla() {
+	private static synchronized short obtenerIdPastilla() {
 		ultimoIdGenerado++;
 		return ultimoIdGenerado;
 	}
 
-	public Short getId() {
+	public short getId() {
 		return id;
+	}
+
+	public ColorPastilla getColor() {
+		return color;
 	}
 
 	public Boolean getEstaMoviendose() {
 		return estaMoviendose;
 	}
 
-	public Short getPosicionX() {
-		return posicionX;
-	}
-
-	public Short getPosicionY() {
-		return posicionY;
+	public Posicion getPosicion() {
+		return posicion;
 	}
 
 	public void detenerPastilla() {
 		estaMoviendose = Boolean.FALSE;
 	}
 
+	public Posicion getPosicionAnterior() {
+		return posicionAnterior;
+	}
+
 	public void moverAbajo() {
-		if (estaMoviendose && posicionY != 0) {
-			posicionY--;
+		if (estaMoviendose) {
+			posicionAnterior = posicion.clone();
+			posicion.reducirPosicionY();
 		}
 	}
 
 	public void moverDerecha() {
 		if (estaMoviendose) {
-			posicionX++;
+			posicionAnterior = posicion.clone();
+			posicion.aumentarPosicionX();
 		}
 	}
 
 	public void moverIzquierda() {
-		if (estaMoviendose && posicionX != 0) {
-			posicionX--;
+		if (estaMoviendose) {
+			posicionAnterior = posicion.clone();
+			posicion.reducirPosicionX();
 		}
+	}
+
+	public void regresarPosicion() {
+		this.posicion = this.posicionAnterior.clone();
 	}
 
 	@Override
 	public String toString() {
-		return "Pastilla : [id=" + id + "] [posicionX=" + posicionX + "] [posicionY=" + posicionY + "]";
+		return "Pastilla : [id=" + id + "] " + posicion;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof Pastilla)) {
+			return false;
+		}
+		Pastilla otraPastilla = (Pastilla) obj;
+		return this.id == otraPastilla.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.id;
+	}
+
 }

@@ -31,10 +31,14 @@ public class Frasco {
 	}
 
 	public void agregarPastilla(Pastilla pastilla) {
-		if (pastilla.getPosicionX() > tamanoX || pastilla.getPosicionY() > tamanoY) {
+		if (pastilla.getPosicion().getPosicionX() > tamanoX || pastilla.getPosicion().getPosicionY() > tamanoY) {
 			throw new IllegalArgumentException("La pastilla ingresada no esta dentro del frasco " + pastilla);
 		}
 		pastillas.add(pastilla);
+	}
+
+	public void eliminarPastilla(Pastilla pastilla) {
+		pastillas.remove(pastilla);
 	}
 
 	public Pastilla getPastillaEnMovimiento() {

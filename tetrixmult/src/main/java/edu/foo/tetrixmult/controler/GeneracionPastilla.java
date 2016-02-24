@@ -7,7 +7,9 @@ public class GeneracionPastilla implements Regla {
 		for (Jugador jugador : partida.getJugadores()) {
 			Frasco frasco = jugador.getFrasco();
 			if (frasco.getPastillaEnMovimiento() == null) {
-				frasco.agregarPastilla(new Pastilla((short) (frasco.getTamanoX() / 2), frasco.getTamanoY()));
+				// FIXME: Modificar creacion
+				// frasco.agregarPastilla(new Pastilla((short)
+				// (frasco.getTamanoX() / 2), frasco.getTamanoY()));
 			}
 		}
 
