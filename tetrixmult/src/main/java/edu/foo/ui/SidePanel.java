@@ -7,12 +7,6 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-/**
- * The {@code SidePanel} class is responsible for displaying various information
- * on the game such as the next piece, the score and current level, and controls.
- * @author Brendan Jones
- *
- */
 public class SidePanel extends JPanel {
 	
 	/**
@@ -103,7 +97,7 @@ public class SidePanel extends JPanel {
 	public SidePanel(DrZam drZam) {
 		this.drZam = drZam;
 		
-		setPreferredSize(new Dimension(200, BoardPanel.PANEL_HEIGHT));
+		setPreferredSize(new Dimension(200, 460));
 		setBackground(Color.BLACK);
 	}
 	
@@ -138,8 +132,6 @@ public class SidePanel extends JPanel {
 		g.setFont(SMALL_FONT);
 		g.drawString("A - Move Left", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("D - Move Right", LARGE_INSET, offset += TEXT_STRIDE);
-//		g.drawString("Q - Rotate Anticlockwise", LARGE_INSET, offset += TEXT_STRIDE);
-//		g.drawString("E - Rotate Clockwise", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("S - Drop", LARGE_INSET, offset += TEXT_STRIDE);
 		g.drawString("P - Pause Game", LARGE_INSET, offset += TEXT_STRIDE);
 		
@@ -203,24 +195,6 @@ public class SidePanel extends JPanel {
 		 */
 		g.setColor(type.getBaseColor());
 		g.fillOval(x, y, TILE_SIZE, TILE_SIZE);
-		
-		/*
-		 * Fill the bottom and right edges of the tile with the dark shading color.
-		 */
-//		g.setColor(type.getDarkColor());
-//		g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
-//		g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
-		
-		/*
-		 * Fill the top and left edges with the light shading. We draw a single line
-		 * for each row or column rather than a rectangle so that we can draw a nice
-		 * looking diagonal where the light and dark shading meet.
-		 */
-//		g.setColor(type.getLightColor());
-//		for(int i = 0; i < SHADE_WIDTH; i++) {
-//			g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
-//			g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
-//		}
 	}
 	
 }

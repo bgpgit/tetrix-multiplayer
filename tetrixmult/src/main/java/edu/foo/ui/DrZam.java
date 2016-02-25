@@ -7,12 +7,9 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-/**
- * The {@code DrZam} class is responsible for handling much of the game logic and
- * reading user input.
- * @author Brendan Jones
- *
- */
+import edu.foo.tetrixmult.controler.Jugador;
+import edu.foo.tetrixmult.controler.Partida;
+
 public class DrZam extends JFrame {
 	
 	/**
@@ -134,9 +131,9 @@ public class DrZam extends JFrame {
 		/*
 		 * Initialize the BoardPanel and SidePanel instances.
 		 */
-		this.board = new BoardPanel(this);
+		this.board = new BoardPanel(new Partida(), new Jugador("P1"));
 		this.side = new SidePanel(this);
-		this.board2 = new BoardPanel(this);
+		this.board2 = new BoardPanel(new Partida(), new Jugador("P2"));
 		
 		/*
 		 * Add the BoardPanel and SidePanel instances to the window.
@@ -172,9 +169,10 @@ public class DrZam extends JFrame {
 				 * position is valid. If so, we decrement the current column by 1.
 				 */
 				case KeyEvent.VK_A:
-					if(!isPaused && board.isValidAndEmpty(currentType, currentCol - 1, currentRow, currentRotation)) {
-						currentCol--;
-					}
+//					if(!isPaused && board.isValidAndEmpty(currentType, currentCol - 1, currentRow, currentRotation)) {
+//						currentCol--;
+//					}
+					System.out.println("KeyEvent.VK_A");
 					break;
 					
 				/*
@@ -183,9 +181,10 @@ public class DrZam extends JFrame {
 				 * position is valid. If so, we increment the current column by 1.
 				 */
 				case KeyEvent.VK_D:
-					if(!isPaused && board.isValidAndEmpty(currentType, currentCol + 1, currentRow, currentRotation)) {
-						currentCol++;
-					}
+//					if(!isPaused && board.isValidAndEmpty(currentType, currentCol + 1, currentRow, currentRotation)) {
+//						currentCol++;
+//					}
+					System.out.println("KeyEvent.VK_D");
 					break;
 					
 				/*
@@ -298,7 +297,8 @@ public class DrZam extends JFrame {
 			 * move our current piece down.
 			 */
 			if(logicTimer.hasElapsedCycle()) {
-				updateGame();
+//				updateGame();
+				System.out.println("--- 307 ---");
 			}
 		
 			//Decrement the drop cool down if necessary.
@@ -326,57 +326,57 @@ public class DrZam extends JFrame {
 	/**
 	 * Updates the game and handles the bulk of it's logic.
 	 */
-	private void updateGame() {
-		/*
-		 * Check to see if the piece's position can move down to the next row.
-		 */
-		if(board.isValidAndEmpty(currentType, currentCol, currentRow + 1, currentRotation)) {
-			//Increment the current row if it's safe to do so.
-			currentRow++;
-		} else {
-			/*
-			 * We've either reached the bottom of the board, or landed on another piece, so
-			 * we need to add the piece to the board.
-			 */
-			board.addPiece(currentType, currentCol, currentRow, currentRotation);
-			
-			/*
-			 * Check to see if adding the new piece resulted in any cleared lines. If so,
-			 * increase the player's score. (Up to 4 lines can be cleared in a single go;
-			 * [1 = 100pts, 2 = 200pts, 3 = 400pts, 4 = 800pts]).
-			 */
-			int cleared = board.checkLines();
-			if(cleared > 0) {
-				score += 50 << cleared;
-			}
-			
-			/*
-			 * Increase the speed slightly for the next piece and update the game's timer
-			 * to reflect the increase.
-			 */
-			gameSpeed += 0.035f;
-			logicTimer.setCyclesPerSecond(gameSpeed);
-			logicTimer.reset();
-			
-			/*
-			 * Set the drop cooldown so the next piece doesn't automatically come flying
-			 * in from the heavens immediately after this piece hits if we've not reacted
-			 * yet. (~0.5 second buffer).
-			 */
-			dropCooldown = 25;
-			
-			/*
-			 * Update the difficulty level. This has no effect on the game, and is only
-			 * used in the "Level" string in the SidePanel.
-			 */
-			level = (int)(gameSpeed * 1.70f);
-			
-			/*
-			 * Spawn a new piece to control.
-			 */
-			spawnPiece();
-		}		
-	}
+//	private void updateGame() {
+//		/*
+//		 * Check to see if the piece's position can move down to the next row.
+//		 */
+//		if(board.isValidAndEmpty(currentType, currentCol, currentRow + 1, currentRotation)) {
+//			//Increment the current row if it's safe to do so.
+//			currentRow++;
+//		} else {
+//			/*
+//			 * We've either reached the bottom of the board, or landed on another piece, so
+//			 * we need to add the piece to the board.
+//			 */
+////			board.addPiece(currentType, currentCol, currentRow, currentRotation);
+//			
+//			/*
+//			 * Check to see if adding the new piece resulted in any cleared lines. If so,
+//			 * increase the player's score. (Up to 4 lines can be cleared in a single go;
+//			 * [1 = 100pts, 2 = 200pts, 3 = 400pts, 4 = 800pts]).
+//			 */
+//			int cleared = board.checkLines();
+//			if(cleared > 0) {
+//				score += 50 << cleared;
+//			}
+//			
+//			/*
+//			 * Increase the speed slightly for the next piece and update the game's timer
+//			 * to reflect the increase.
+//			 */
+//			gameSpeed += 0.035f;
+//			logicTimer.setCyclesPerSecond(gameSpeed);
+//			logicTimer.reset();
+//			
+//			/*
+//			 * Set the drop cooldown so the next piece doesn't automatically come flying
+//			 * in from the heavens immediately after this piece hits if we've not reacted
+//			 * yet. (~0.5 second buffer).
+//			 */
+//			dropCooldown = 25;
+//			
+//			/*
+//			 * Update the difficulty level. This has no effect on the game, and is only
+//			 * used in the "Level" string in the SidePanel.
+//			 */
+//			level = (int)(gameSpeed * 1.70f);
+//			
+//			/*
+//			 * Spawn a new piece to control.
+//			 */
+//			spawnPiece();
+//		}		
+//	}
 	
 	/**
 	 * Forces the BoardPanel and SidePanel to repaint.
@@ -422,10 +422,10 @@ public class DrZam extends JFrame {
 		 * If the spawn point is invalid, we need to pause the game and flag that we've lost
 		 * because it means that the pieces on the board have gotten too high.
 		 */
-		if(!board.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
-			this.isGameOver = true;
-			logicTimer.setPaused(true);
-		}		
+//		if(!board.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
+//			this.isGameOver = true;
+//			logicTimer.setPaused(true);
+//		}		
 	}
 
 	/**
@@ -456,8 +456,8 @@ public class DrZam extends JFrame {
 		 */
 		if(currentCol < -left) {
 			newColumn -= currentCol - left;
-		} else if(currentCol + currentType.getDimension() - right >= BoardPanel.COL_COUNT) {
-			newColumn -= (currentCol + currentType.getDimension() - right) - BoardPanel.COL_COUNT + 1;
+		} else if(currentCol + currentType.getDimension() - right >= 10) {
+			newColumn -= (currentCol + currentType.getDimension() - right) - 10 + 1;
 		}
 		
 		/*
@@ -466,19 +466,19 @@ public class DrZam extends JFrame {
 		 */
 		if(currentRow < -top) {
 			newRow -= currentRow - top;
-		} else if(currentRow + currentType.getDimension() - bottom >= BoardPanel.ROW_COUNT) {
-			newRow -= (currentRow + currentType.getDimension() - bottom) - BoardPanel.ROW_COUNT + 1;
+		} else if(currentRow + currentType.getDimension() - bottom >= 17) {
+			newRow -= (currentRow + currentType.getDimension() - bottom) - 17 + 1;
 		}
 		
 		/*
 		 * Check to see if the new position is acceptable. If it is, update the rotation and
 		 * position of the piece.
 		 */
-		if(board.isValidAndEmpty(currentType, newColumn, newRow, newRotation)) {
-			currentRotation = newRotation;
-			currentRow = newRow;
-			currentCol = newColumn;
-		}
+//		if(board.isValidAndEmpty(currentType, newColumn, newRow, newRotation)) {
+//			currentRotation = newRotation;
+//			currentRow = newRow;
+//			currentCol = newColumn;
+//		}
 	}
 	
 	/**
