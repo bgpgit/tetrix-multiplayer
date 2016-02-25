@@ -1,5 +1,6 @@
 package edu.foo.tetrixmult.controler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Frasco {
@@ -16,6 +17,7 @@ public class Frasco {
 		tamanoX = TAMANO_X_DEFECTO;
 		tamanoY = TAMANO_Y_DEFECTO;
 		estaLleano = Boolean.FALSE;
+		pastillas = new ArrayList<Pastilla>();
 	}
 
 	public Short getTamanoX() {
