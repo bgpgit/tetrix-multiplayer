@@ -7,12 +7,6 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-/**
- * The {@code SidePanel} class is responsible for displaying various information
- * on the game such as the next piece, the score and current level, and controls.
- * @author Brendan Jones
- *
- */
 public class SidePanel extends JPanel {
 	
 	/**
@@ -94,14 +88,14 @@ public class SidePanel extends JPanel {
 	/**
 	 * The DrZam instance.
 	 */
-	private DrZam tetris;
+	private DrZam drzam;
 	
 	/**
 	 * Creates a new SidePanel and sets it's display properties.
-	 * @param tetris The DrZam instance to use.
+	 * @param drzam The DrZam instance to use.
 	 */
-	public SidePanel(DrZam tetris) {
-		this.tetris = tetris;
+	public SidePanel(DrZam drzam) {
+		this.drzam = drzam;
 		
 		setPreferredSize(new Dimension(200, BoardPanel.PANEL_HEIGHT));
 		setBackground(Color.BLACK);
@@ -121,42 +115,60 @@ public class SidePanel extends JPanel {
 		 */
 		int offset;
 		
+//		/*
+//		 * Draw the "Stats" category.
+//		 */
+//		g.setFont(LARGE_FONT);
+//		g.drawString("Stats", SMALL_INSET, offset = STATS_INSET);
+//		g.setFont(SMALL_FONT);
+//		g.drawString("Level: " + drzam.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
+//		g.drawString("Score: " + drzam.getScore(), LARGE_INSET, offset += TEXT_STRIDE);
+		
 		/*
-		 * Draw the "Stats" category.
+		 * Draw the "Stats" category./ Draw the score box.
 		 */
 		g.setFont(LARGE_FONT);
-		g.drawString("Stats", SMALL_INSET, offset = STATS_INSET);
+//		g.drawString("Score", SMALL_INSET, offset = STATS_INSET);
+		g.drawString("Score", SMALL_INSET, offset = STATS_INSET);
 		g.setFont(SMALL_FONT);
-		g.drawString("Level: " + tetris.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("Score: " + tetris.getScore(), LARGE_INSET, offset += TEXT_STRIDE);
+//		g.drawString("Level: " + drzam.getLevel(), LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString(""+drzam.getScore(), LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawRect(SMALL_INSET+10, STATS_INSET+10, SQUARE_SIZE * 2, SQUARE_SIZE * 2);
 		
 		/*
 		 * Draw the "Controls" category.
 		 */
+//		g.setFont(LARGE_FONT);
+//		g.drawString("Controls", SMALL_INSET, offset = CONTROLS_INSET);
+//		g.setFont(SMALL_FONT);
+//		g.drawString("A - Move Left", LARGE_INSET, offset += TEXT_STRIDE);
+//		g.drawString("D - Move Right", LARGE_INSET, offset += TEXT_STRIDE);
+//		g.drawString("Q - Rotate Anticlockwise", LARGE_INSET, offset += TEXT_STRIDE);
+//		g.drawString("E - Rotate Clockwise", LARGE_INSET, offset += TEXT_STRIDE);
+//		g.drawString("S - Drop", LARGE_INSET, offset += TEXT_STRIDE);
+//		g.drawString("P - Pause Game", LARGE_INSET, offset += TEXT_STRIDE);
 		g.setFont(LARGE_FONT);
-		g.drawString("Controls", SMALL_INSET, offset = CONTROLS_INSET);
+		g.drawString("Controles", SMALL_INSET, offset = CONTROLS_INSET);
 		g.setFont(SMALL_FONT);
-		g.drawString("A - Move Left", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("D - Move Right", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("Q - Rotate Anticlockwise", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("E - Rotate Clockwise", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("S - Drop", LARGE_INSET, offset += TEXT_STRIDE);
-		g.drawString("P - Pause Game", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("A - Izquierda", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("D - Derecha", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("S - Bajar", LARGE_INSET, offset += TEXT_STRIDE);
+		g.drawString("P - Pausa", LARGE_INSET, offset += TEXT_STRIDE);
 		
-		/*
-		 * Draw the next piece preview box.
-		 */
-		g.setFont(LARGE_FONT);
-		g.drawString("Next Piece:", SMALL_INSET, 70);
-		g.drawRect(SQUARE_CENTER_X - SQUARE_SIZE, SQUARE_CENTER_Y - SQUARE_SIZE, SQUARE_SIZE * 2, SQUARE_SIZE * 2);
+//		/*
+//		 * Draw the next piece preview box.
+//		 */
+//		g.setFont(LARGE_FONT);
+//		g.drawString("Next Piece:", SMALL_INSET, 70);
+//		g.drawRect(SQUARE_CENTER_X - SQUARE_SIZE, SQUARE_CENTER_Y - SQUARE_SIZE, SQUARE_SIZE * 2, SQUARE_SIZE * 2);
 		
 		/*
 		 * Draw a preview of the next piece that will be spawned. The code is pretty much
 		 * identical to the drawing code on the board, just smaller and centered, rather
 		 * than constrained to a grid.
 		 */
-		PillColor type = tetris.getNextPieceType();
-		if(!tetris.isGameOver() && type != null) {
+		PillColor type = drzam.getNextPieceType();
+		if(!drzam.isGameOver() && type != null) {
 			/*
 			 * Get the size properties of the current piece.
 			 */
@@ -202,25 +214,26 @@ public class SidePanel extends JPanel {
 		 * Fill the entire tile with the base color.
 		 */
 		g.setColor(type.getBaseColor());
-		g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-		
-		/*
-		 * Fill the bottom and right edges of the tile with the dark shading color.
-		 */
-		g.setColor(type.getDarkColor());
-		g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
-		g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
-		
-		/*
-		 * Fill the top and left edges with the light shading. We draw a single line
-		 * for each row or column rather than a rectangle so that we can draw a nice
-		 * looking diagonal where the light and dark shading meet.
-		 */
-		g.setColor(type.getLightColor());
-		for(int i = 0; i < SHADE_WIDTH; i++) {
-			g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
-			g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
-		}
+//		g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+//		
+//		/*
+//		 * Fill the bottom and right edges of the tile with the dark shading color.
+//		 */
+//		g.setColor(type.getDarkColor());
+//		g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
+//		g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
+//		
+//		/*
+//		 * Fill the top and left edges with the light shading. We draw a single line
+//		 * for each row or column rather than a rectangle so that we can draw a nice
+//		 * looking diagonal where the light and dark shading meet.
+//		 */
+//		g.setColor(type.getLightColor());
+//		for(int i = 0; i < SHADE_WIDTH; i++) {
+//			g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
+//			g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
+//		}
+		g.fillOval(x, y, TILE_SIZE, TILE_SIZE);
 	}
 	
 }

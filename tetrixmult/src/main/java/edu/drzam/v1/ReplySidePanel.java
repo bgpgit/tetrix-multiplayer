@@ -9,12 +9,6 @@ import javax.swing.JPanel;
 
 import com.google.gson.Gson;
 
-/**
- * The {@code SidePanel} class is responsible for displaying various information
- * on the game such as the next piece, the score and current level, and controls.
- * @author Brendan Jones
- *
- */
 public class ReplySidePanel extends JPanel {
 	
 	/**
@@ -50,12 +44,12 @@ public class ReplySidePanel extends JPanel {
 	/**
 	 * The number of pixels that a tile takes up.
 	 */
-	public static final int TILE_SIZE = 34;
+	public static final int TILE_SIZE = 30;
 	
 	/**
 	 * The width of the shading on the tiles.
 	 */
-	public static final int SHADE_WIDTH = 4;
+	public static final int SHADE_WIDTH = 5;
 	
 	/**
 	 * The central x coordinate on the game board.
@@ -90,7 +84,7 @@ public class ReplySidePanel extends JPanel {
 	/**
 	 * The DrZam instance.
 	 */
-	private DrZam tetris;
+	private DrZam drzam;
 	
 	/**
 	 * The tiles that make up the board.
@@ -101,10 +95,10 @@ public class ReplySidePanel extends JPanel {
 	
 	/**
 	 * Creates a new SidePanel and sets it's display properties.
-	 * @param tetris The DrZam instance to use.
+	 * @param drzam The DrZam instance to use.
 	 */
-	public ReplySidePanel(DrZam tetris) {
-		this.tetris = tetris;
+	public ReplySidePanel(DrZam drzam) {
+		this.drzam = drzam;
 		this.tiles = new PillColor[ROW_COUNT][COL_COUNT];
 		
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
@@ -162,12 +156,12 @@ public class ReplySidePanel extends JPanel {
 		/*
 		 * Draw the board differently depending on the current game state.
 		 */
-		if(tetris.isPaused()) {
+		if(drzam.isPaused()) {
 			g.setFont(LARGE_FONT);
 			g.setColor(Color.WHITE);
 			String msg = "PAUSED";
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, CENTER_Y);
-		} else if(tetris.isNewGame() || tetris.isGameOver()) {
+		} else if(drzam.isNewGame() || drzam.isGameOver()) {
 			g.setFont(LARGE_FONT);
 			g.setColor(Color.WHITE);
 			
@@ -176,10 +170,10 @@ public class ReplySidePanel extends JPanel {
 			 * we can handle them together and just use a ternary operator to change
 			 * the messages that are displayed.
 			 */
-			String msg = tetris.isNewGame() ? "TETRIS" : "GAME OVER";
+			String msg = drzam.isNewGame() ? "DR. ZAM" : "GAME OVER";
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 150);
 			g.setFont(SMALL_FONT);
-			msg = "Press Enter to Play" + (tetris.isNewGame() ? "" : " Again");
+			msg = "Press Enter to Play" + (drzam.isNewGame() ? "" : " Again");
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
 		
 		} else {
@@ -287,14 +281,12 @@ public class ReplySidePanel extends JPanel {
 		 * Fill the entire tile with the base color.
 		 */
 		g.setColor(base);
-		g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+		g.fillOval(x, y, TILE_SIZE, TILE_SIZE);
 		
 		/*
 		 * Fill the bottom and right edges of the tile with the dark shading color.
 		 */
 		g.setColor(dark);
-		g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
-		g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
 		
 		/*
 		 * Fill the top and left edges with the light shading. We draw a single line
@@ -302,10 +294,6 @@ public class ReplySidePanel extends JPanel {
 		 * looking diagonal where the light and dark shading meet.
 		 */
 		g.setColor(light);
-		for(int i = 0; i < SHADE_WIDTH; i++) {
-			g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
-			g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
-		}
 	}
 	
 	/**

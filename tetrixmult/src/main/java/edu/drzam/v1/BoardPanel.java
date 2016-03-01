@@ -10,15 +10,12 @@ import javax.swing.JPanel;
 
 import com.google.gson.Gson;
 
-/**
- * The {@code BoardPanel} class is responsible for displaying the game grid and
- * handling things related to the game board.
- * @author Brendan Jones
- *
- */
 public class BoardPanel extends JPanel {
 	
-	public static int player = 2;
+	/**
+	 * Number of player that joins the game
+	 */
+	public static int player = 1;
 	
 	/**
 	 * Serial Version UID.
@@ -65,12 +62,12 @@ public class BoardPanel extends JPanel {
 	/**
 	 * The number of pixels that a tile takes up.
 	 */
-	public static final int TILE_SIZE = 34;
+	public static final int TILE_SIZE = 30;
 	
 	/**
 	 * The width of the shading on the tiles.
 	 */
-	public static final int SHADE_WIDTH = 4;
+	public static final int SHADE_WIDTH = 5;
 	
 	/**
 	 * The central x coordinate on the game board.
@@ -105,7 +102,7 @@ public class BoardPanel extends JPanel {
 	/**
 	 * The DrZam instance.
 	 */
-	private DrZam tetris;
+	private DrZam drzam;
 	
 	/**
 	 * The tiles that make up the board.
@@ -114,10 +111,10 @@ public class BoardPanel extends JPanel {
 		
 	/**
 	 * Crates a new GameBoard instance.
-	 * @param tetris The DrZam instance to use.
+	 * @param drzam The DrZam instance to use.
 	 */
-	public BoardPanel(DrZam tetris) {
-		this.tetris = tetris;
+	public BoardPanel(DrZam drzam) {
+		this.drzam = drzam;
 		this.tiles = new PillColor[ROW_COUNT][COL_COUNT];
 		
 		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
@@ -215,10 +212,10 @@ public class BoardPanel extends JPanel {
 		info.setPlayer(BoardPanel.player);
 		info.setScore(0);
 		
-		info.setType(tetris.getPieceType());
-		info.setPieceCol(tetris.getPieceCol());
-		info.setPieceRow(tetris.getPieceRow());
-		info.setRotation(tetris.getPieceRotation());
+		info.setType(drzam.getPieceType());
+		info.setPieceCol(drzam.getPieceCol());
+		info.setPieceRow(drzam.getPieceRow());
+		info.setRotation(drzam.getPieceRotation());
 		
 		info.setTiles(tiles);
 		Gson gson = new Gson();
@@ -320,12 +317,12 @@ public class BoardPanel extends JPanel {
 		/*
 		 * Draw the board differently depending on the current game state.
 		 */
-		if(tetris.isPaused()) {
+		if(drzam.isPaused()) {
 			g.setFont(LARGE_FONT);
 			g.setColor(Color.WHITE);
 			String msg = "PAUSED";
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, CENTER_Y);
-		} else if(tetris.isNewGame() || tetris.isGameOver()) {
+		} else if(drzam.isNewGame() || drzam.isGameOver()) {
 			g.setFont(LARGE_FONT);
 			g.setColor(Color.WHITE);
 			
@@ -334,10 +331,10 @@ public class BoardPanel extends JPanel {
 			 * we can handle them together and just use a ternary operator to change
 			 * the messages that are displayed.
 			 */
-			String msg = tetris.isNewGame() ? "TETRIS" : "GAME OVER";
+			String msg = drzam.isNewGame() ? "DR. ZAM" : "GAME OVER";
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 150);
 			g.setFont(SMALL_FONT);
-			msg = "Press Enter to Play" + (tetris.isNewGame() ? "" : " Again");
+			msg = "Press Enter to Play" + (drzam.isNewGame() ? "" : " Again");
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
 		} else {
 			
@@ -360,10 +357,10 @@ public class BoardPanel extends JPanel {
 			 * would just be slow and confusing.
 			 */
 			prepareLiveBoardInfo();
-			PillColor type = tetris.getPieceType();
-			int pieceCol = tetris.getPieceCol();
-			int pieceRow = tetris.getPieceRow();
-			int rotation = tetris.getPieceRotation();
+			PillColor type = drzam.getPieceType();
+			int pieceCol = drzam.getPieceCol();
+			int pieceRow = drzam.getPieceRow();
+			int rotation = drzam.getPieceRotation();
 			
 			//Draw the piece onto the board.
 			for(int col = 0; col < type.getDimension(); col++) {
@@ -448,14 +445,12 @@ public class BoardPanel extends JPanel {
 		 * Fill the entire tile with the base color.
 		 */
 		g.setColor(base);
-		g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+		g.fillOval(x, y, TILE_SIZE, TILE_SIZE);
 		
 		/*
 		 * Fill the bottom and right edges of the tile with the dark shading color.
 		 */
 		g.setColor(dark);
-		g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
-		g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
 		
 		/*
 		 * Fill the top and left edges with the light shading. We draw a single line
@@ -463,10 +458,6 @@ public class BoardPanel extends JPanel {
 		 * looking diagonal where the light and dark shading meet.
 		 */
 		g.setColor(light);
-		for(int i = 0; i < SHADE_WIDTH; i++) {
-			g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
-			g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
-		}
 	}
 
 }

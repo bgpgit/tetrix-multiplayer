@@ -130,7 +130,7 @@ public class DrZam extends JFrame {
 		/*
 		 * Set the basic properties of the window.
 		 */
-		super("CandyCrush");
+		super("Dr. Zam");
 		
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

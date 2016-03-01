@@ -2,52 +2,58 @@ package edu.drzam.v1;
 
 import java.awt.Color;
 
-/**
- * The {@code PieceType} enum describes the properties of the various pieces that can be used in the game.
- * @author Brendan Jones
- *
- */
 public enum PillColor {
 
 	/**
-	 * Piece TypeI.
+	 * Piece Color PillLB
 	 */
-	TypeI(
-			new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][] {
+	
+	TypePillLB(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
 		{
-			true
+			true,
 		}
 	}),
 	
 	/**
-	 * Piece TypeII.
+	 * Piece Color PillBlue
 	 */
-	TypeII(
-			new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][] {
+	
+	TypePillBlue(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
 		{
-			true
+			true,
 		}
 	}),
 	
 	/**
-	 * Piece TypeIII.
+	 * Piece Color PillPink
 	 */
-	TypeIII(
-			new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][] {
+	
+	TypePillPink(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
 		{
-			true
+			true,
 		}
 	}),
 	
 	/**
-	 * Piece TypeIV.
+	 * Piece Color PillYllw
 	 */
-	TypeIV(
-			new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][] {
+	
+	TypePillYllw(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][]{
 		{
-			true
+			true,
+		}
+	}),
+	
+	/**
+	 * Piece Color PillRed
+	 */
+	
+	TypePillRed(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][]{
+		{
+			true,
 		}
 	});
+	
 		
 	/**
 	 * The base color of tiles of this type.
