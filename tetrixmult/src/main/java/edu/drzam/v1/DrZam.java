@@ -1,8 +1,15 @@
-package edu.foo.ui;
+package edu.drzam.v1;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -28,22 +35,19 @@ public class DrZam extends JFrame {
 	/**
 	 * The number of pieces that exist.
 	 */
-	private static final int TYPE_COUNT = ColorPastilla2.values().length;
+	private static final int TYPE_COUNT = PillColor.values().length;
 		
 	/**
 	 * The BoardPanel instance.
 	 */
-	private BoardPanel board;
+	private BoardPanel liveBoard;
 	
-	/**
-	 * The BoardPanel instance.
-	 */
-	private BoardPanel board2;
+	private ReplySidePanel replyBoard;
 	
 	/**
 	 * The SidePanel instance.
 	 */
-	private SidePanel side;
+	private SidePanel centerPanel;
 	
 	/**
 	 * Whether or not the game is paused.
@@ -85,12 +89,12 @@ public class DrZam extends JFrame {
 	/**
 	 * The current type of tile.
 	 */
-	private ColorPastilla2 currentType;
+	private PillColor currentType;
 	
 	/**
 	 * The next type of tile.
 	 */
-	private ColorPastilla2 nextType;
+	private PillColor nextType;
 		
 	/**
 	 * The current column of our tile.
@@ -117,7 +121,7 @@ public class DrZam extends JFrame {
 	 * The speed of the game.
 	 */
 	private float gameSpeed;
-		
+	
 	/**
 	 * Creates a new DrZam instance. Sets up the window's properties,
 	 * and adds a controller listener.
@@ -126,24 +130,25 @@ public class DrZam extends JFrame {
 		/*
 		 * Set the basic properties of the window.
 		 */
-		super("Dr. Mario");
+		super("CandyCrush");
+		
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(true);
+		setResizable(false);
 		
 		/*
 		 * Initialize the BoardPanel and SidePanel instances.
 		 */
-		this.board = new BoardPanel(this);
-		this.side = new SidePanel(this);
-		this.board2 = new BoardPanel(this);
+		this.liveBoard = new BoardPanel(this);
+		this.replyBoard = new ReplySidePanel(this);
+		this.centerPanel = new SidePanel(this);
 		
 		/*
 		 * Add the BoardPanel and SidePanel instances to the window.
 		 */
-		add(board, BorderLayout.WEST);
-		add(board2, BorderLayout.EAST);
-		add(side, BorderLayout.CENTER);
+		add(liveBoard, BorderLayout.WEST);
+		add(centerPanel, BorderLayout.CENTER);
+		add(replyBoard, BorderLayout.EAST);
 		
 		/*
 		 * Adds a custom anonymous KeyListener to the frame.
@@ -160,7 +165,7 @@ public class DrZam extends JFrame {
 				 * paused and that there is no drop cooldown, then set the
 				 * logic timer to run at a speed of 25 cycles per second.
 				 */
-				case KeyEvent.VK_S:
+				case KeyEvent.VK_DOWN:
 					if(!isPaused && dropCooldown == 0) {
 						logicTimer.setCyclesPerSecond(25.0f);
 					}
@@ -171,8 +176,8 @@ public class DrZam extends JFrame {
 				 * not paused and that the position to the left of the current
 				 * position is valid. If so, we decrement the current column by 1.
 				 */
-				case KeyEvent.VK_A:
-					if(!isPaused && board.isValidAndEmpty(currentType, currentCol - 1, currentRow, currentRotation)) {
+				case KeyEvent.VK_LEFT:
+					if(!isPaused && liveBoard.isValidAndEmpty(currentType, currentCol - 1, currentRow, currentRotation)) {
 						currentCol--;
 					}
 					break;
@@ -182,33 +187,9 @@ public class DrZam extends JFrame {
 				 * not paused and that the position to the right of the current
 				 * position is valid. If so, we increment the current column by 1.
 				 */
-				case KeyEvent.VK_D:
-					if(!isPaused && board.isValidAndEmpty(currentType, currentCol + 1, currentRow, currentRotation)) {
+				case KeyEvent.VK_RIGHT:
+					if(!isPaused && liveBoard.isValidAndEmpty(currentType, currentCol + 1, currentRow, currentRotation)) {
 						currentCol++;
-					}
-					break;
-					
-				/*
-				 * Rotate Anticlockwise - When pressed, check to see that the game is not paused
-				 * and then attempt to rotate the piece anticlockwise. Because of the size and
-				 * complexity of the rotation code, as well as it's similarity to clockwise
-				 * rotation, the code for rotating the piece is handled in another method.
-				 */
-				case KeyEvent.VK_Q:
-					if(!isPaused) {
-						rotatePiece((currentRotation == 0) ? 3 : currentRotation - 1);
-					}
-					break;
-				
-				/*
-			     * Rotate Clockwise - When pressed, check to see that the game is not paused
-				 * and then attempt to rotate the piece clockwise. Because of the size and
-				 * complexity of the rotation code, as well as it's similarity to anticlockwise
-				 * rotation, the code for rotating the piece is handled in another method.
-				 */
-				case KeyEvent.VK_E:
-					if(!isPaused) {
-						rotatePiece((currentRotation == 3) ? 0 : currentRotation + 1);
 					}
 					break;
 					
@@ -235,8 +216,10 @@ public class DrZam extends JFrame {
 						resetGame();
 					}
 					break;
-				
+					
 				}
+				
+				
 			}
 			
 			@Override
@@ -249,7 +232,7 @@ public class DrZam extends JFrame {
 				 * back to whatever the current game speed is and clear out
 				 * any cycles that might still be elapsed.
 				 */
-				case KeyEvent.VK_S:
+				case KeyEvent.VK_DOWN:
 					logicTimer.setCyclesPerSecond(gameSpeed);
 					logicTimer.reset();
 					break;
@@ -286,7 +269,13 @@ public class DrZam extends JFrame {
 		this.logicTimer = new Clock(gameSpeed);
 		logicTimer.setPaused(true);
 		
+		if (BoardPanel.player == 1) {
+			Thread mainserver = new Thread(new DrZamServer());
+			mainserver.start();
+		}
+		
 		while(true) {
+			
 			//Get the time that the frame started.
 			long start = System.nanoTime();
 			
@@ -298,6 +287,10 @@ public class DrZam extends JFrame {
 			 * move our current piece down.
 			 */
 			if(logicTimer.hasElapsedCycle()) {
+				String replyBoardInfo = synchronizeReplyBoard(liveBoard.prepareLiveBoardInfo());
+				if (replyBoardInfo!=null) {
+					replyBoard.sinchronizeReplyBoard(replyBoardInfo);
+				}
 				updateGame();
 			}
 		
@@ -323,6 +316,45 @@ public class DrZam extends JFrame {
 		}
 	}
 	
+	private String synchronizeReplyBoard(String jSonLiveBoardInfo) {
+		String jSonReplyBoardInfo = null;
+		try {
+			String host = new String();
+			if (BoardPanel.player == 1)
+				host = "127.0.0.1";
+			else
+				host = "192.168.14.121";
+			
+			InetAddress address = InetAddress.getByName(host);
+			Socket connection = new Socket(address, 7003);
+			
+			BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
+			
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "US-ASCII");
+	        outputStreamWriter.write(jSonLiveBoardInfo+(char)13);
+	        outputStreamWriter.flush();
+	        		        
+	        StringBuffer strBuffer = new StringBuffer();
+			BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			jSonReplyBoardInfo = input.readLine();
+			//strBuffer = new StringBuffer(jSonReplyBoardInfo);
+	    	
+	    	System.out.println("Message Response: " + jSonReplyBoardInfo);
+	    	
+	    	outputStream.close();
+	    	outputStreamWriter.close();
+			
+	    	input.close();
+	    	
+	    	connection.close();
+			
+		} catch (IOException e) {
+			System.out.println("conexion no establecida...");
+			e.printStackTrace();
+		}
+		return jSonReplyBoardInfo;
+	}
+	
 	/**
 	 * Updates the game and handles the bulk of it's logic.
 	 */
@@ -330,22 +362,23 @@ public class DrZam extends JFrame {
 		/*
 		 * Check to see if the piece's position can move down to the next row.
 		 */
-		if(board.isValidAndEmpty(currentType, currentCol, currentRow + 1, currentRotation)) {
+		if(liveBoard.isValidAndEmpty(currentType, currentCol, currentRow + 1, currentRotation)) {
 			//Increment the current row if it's safe to do so.
 			currentRow++;
 		} else {
+			
 			/*
 			 * We've either reached the bottom of the board, or landed on another piece, so
 			 * we need to add the piece to the board.
 			 */
-			board.addPiece(currentType, currentCol, currentRow, currentRotation);
+			liveBoard.addPiece(currentType, currentCol, currentRow, currentRotation);
 			
 			/*
 			 * Check to see if adding the new piece resulted in any cleared lines. If so,
 			 * increase the player's score. (Up to 4 lines can be cleared in a single go;
 			 * [1 = 100pts, 2 = 200pts, 3 = 400pts, 4 = 800pts]).
 			 */
-			int cleared = board.checkLines();
+			int cleared = liveBoard.checkLines();
 			if(cleared > 0) {
 				score += 50 << cleared;
 			}
@@ -382,8 +415,9 @@ public class DrZam extends JFrame {
 	 * Forces the BoardPanel and SidePanel to repaint.
 	 */
 	private void renderGame() {
-		board.repaint();
-		side.repaint();
+		liveBoard.repaint();
+		centerPanel.repaint();
+		replyBoard.repaint();
 	}
 	
 	/**
@@ -394,10 +428,10 @@ public class DrZam extends JFrame {
 		this.level = 1;
 		this.score = 0;
 		this.gameSpeed = 1.0f;
-		this.nextType = ColorPastilla2.values()[random.nextInt(TYPE_COUNT)];
+		this.nextType = PillColor.values()[random.nextInt(TYPE_COUNT)];
 		this.isNewGame = false;
 		this.isGameOver = false;		
-		board.clear();
+		liveBoard.clear();
 		logicTimer.reset();
 		logicTimer.setCyclesPerSecond(gameSpeed);
 		spawnPiece();
@@ -416,69 +450,16 @@ public class DrZam extends JFrame {
 		this.currentCol = currentType.getSpawnColumn();
 		this.currentRow = currentType.getSpawnRow();
 		this.currentRotation = 0;
-		this.nextType = ColorPastilla2.values()[random.nextInt(TYPE_COUNT)];
+		this.nextType = PillColor.values()[random.nextInt(TYPE_COUNT)];
 		
 		/*
 		 * If the spawn point is invalid, we need to pause the game and flag that we've lost
 		 * because it means that the pieces on the board have gotten too high.
 		 */
-		if(!board.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
+		if(!liveBoard.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
 			this.isGameOver = true;
 			logicTimer.setPaused(true);
 		}		
-	}
-
-	/**
-	 * Attempts to set the rotation of the current piece to newRotation.
-	 * @param newRotation The rotation of the new peice.
-	 */
-	private void rotatePiece(int newRotation) {
-		/*
-		 * Sometimes pieces will need to be moved when rotated to avoid clipping
-		 * out of the board (the I piece is a good example of this). Here we store
-		 * a temporary row and column in case we need to move the tile as well.
-		 */
-		int newColumn = currentCol;
-		int newRow = currentRow;
-		
-		/*
-		 * Get the insets for each of the sides. These are used to determine how
-		 * many empty rows or columns there are on a given side.
-		 */
-		int left = currentType.getLeftInset(newRotation);
-		int right = currentType.getRightInset(newRotation);
-		int top = currentType.getTopInset(newRotation);
-		int bottom = currentType.getBottomInset(newRotation);
-		
-		/*
-		 * If the current piece is too far to the left or right, move the piece away from the edges
-		 * so that the piece doesn't clip out of the map and automatically become invalid.
-		 */
-		if(currentCol < -left) {
-			newColumn -= currentCol - left;
-		} else if(currentCol + currentType.getDimension() - right >= BoardPanel.COL_COUNT) {
-			newColumn -= (currentCol + currentType.getDimension() - right) - BoardPanel.COL_COUNT + 1;
-		}
-		
-		/*
-		 * If the current piece is too far to the top or bottom, move the piece away from the edges
-		 * so that the piece doesn't clip out of the map and automatically become invalid.
-		 */
-		if(currentRow < -top) {
-			newRow -= currentRow - top;
-		} else if(currentRow + currentType.getDimension() - bottom >= BoardPanel.ROW_COUNT) {
-			newRow -= (currentRow + currentType.getDimension() - bottom) - BoardPanel.ROW_COUNT + 1;
-		}
-		
-		/*
-		 * Check to see if the new position is acceptable. If it is, update the rotation and
-		 * position of the piece.
-		 */
-		if(board.isValidAndEmpty(currentType, newColumn, newRow, newRotation)) {
-			currentRotation = newRotation;
-			currentRow = newRow;
-			currentCol = newColumn;
-		}
 	}
 	
 	/**
@@ -525,7 +506,7 @@ public class DrZam extends JFrame {
 	 * Gets the current type of piece we're using.
 	 * @return The piece type.
 	 */
-	public ColorPastilla2 getPieceType() {
+	public PillColor getPieceType() {
 		return currentType;
 	}
 	
@@ -533,7 +514,7 @@ public class DrZam extends JFrame {
 	 * Gets the next type of piece we're using.
 	 * @return The next piece.
 	 */
-	public ColorPastilla2 getNextPieceType() {
+	public PillColor getNextPieceType() {
 		return nextType;
 	}
 	

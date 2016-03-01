@@ -1,64 +1,53 @@
-package edu.foo.ui;
+package edu.drzam.v1;
 
 import java.awt.Color;
 
 /**
- * {@code PieceColor} enum describes the properties of the various pieces that can be used in the game.
- * @Original author Brendan Jones
+ * The {@code PieceType} enum describes the properties of the various pieces that can be used in the game.
+ * @author Brendan Jones
  *
  */
-public enum ColorPastilla2 {
+public enum PillColor {
 
 	/**
-	 * Piece Color PillLB
+	 * Piece TypeI.
 	 */
-	
-	TypePillLB(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
+	TypeI(
+			new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][] {
 		{
-			true,
+			true
 		}
 	}),
 	
 	/**
-	 * Piece Color PillBlue
+	 * Piece TypeII.
 	 */
-	
-	TypePillBlue(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
+	TypeII(
+			new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][] {
 		{
-			true,
+			true
 		}
 	}),
 	
 	/**
-	 * Piece Color PillPink
+	 * Piece TypeIII.
 	 */
-	
-	TypePillPink(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
+	TypeIII(
+			new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][] {
 		{
-			true,
+			true
 		}
 	}),
 	
 	/**
-	 * Piece Color PillYllw
+	 * Piece TypeIV.
 	 */
-	
-	TypePillYllw(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][]{
+	TypeIV(
+			new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][] {
 		{
-			true,
-		}
-	}),
-	
-	/**
-	 * Piece Color PillRed
-	 */
-	
-	TypePillRed(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][]{
-		{
-			true,
+			true
 		}
 	});
-	
 		
 	/**
 	 * The base color of tiles of this type.
@@ -117,7 +106,7 @@ public enum ColorPastilla2 {
 	 * @param rows The number of rows.
 	 * @param tiles The tiles.
 	 */
-	private ColorPastilla2(Color color, int dimension, int cols, int rows, boolean[][] tiles) {
+	private PillColor(Color color, int dimension, int cols, int rows, boolean[][] tiles) {
 		this.baseColor = color;
 		this.lightColor = color.brighter();
 		this.darkColor = color.darker();
