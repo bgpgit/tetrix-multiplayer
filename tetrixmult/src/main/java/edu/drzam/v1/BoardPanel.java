@@ -124,7 +124,9 @@ public class BoardPanel extends JPanel {
 	 * The tiles that make up the board.
 	 */
 	private PillColor[][] tiles;
-		
+	
+	private boolean virusSet;
+	
 	/**
 	 * Crates a new GameBoard instance.
 	 * @param drzam The DrZam instance to use.
@@ -355,6 +357,8 @@ public class BoardPanel extends JPanel {
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 300);
 		} else {
 			
+			drawVirus();
+			
 			/*
 			 * Draw the tiles onto the board.
 			 */
@@ -387,12 +391,6 @@ public class BoardPanel extends JPanel {
 					}
 				}
 			}
-			
-			drawTile(type, (5) * TILE_SIZE, (15 - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
-			setTile(5, 15, type);
-			System.out.println("---------------------------Inicia drawVirus---------------------");
-			drawVirus(g);
-			System.out.println("---------------------------Termina drawVirus---------------------");
 			
 			/*
 			 * Draw the ghost (semi-transparent piece that shows where the current piece will land). I couldn't think of
@@ -490,26 +488,25 @@ public class BoardPanel extends JPanel {
 	 * @param tileSize
 	 * @param g The graphics object.
 	 */
-	private void drawVirus(Graphics g){
-		PillColor virusColor = null;
-		int x = 0;
-		int y= 0;
-		random = new Random();
-		
-		x = random.nextInt((10 - 0) + 1) + 0;
-		y = random.nextInt((20 - 0) + 1) + 0;
-		
-		for(int i = 0; i < VIRUS_QUANTITY; i++){
+	public void drawVirus(){
+		if (!isVirusSet()) {
+			setVirusSet(true);
+			PillColor virusColor = null;
+			int x = 0;
+			int y= 0;
+			random = new Random();
 			
-			virusColor = PillColor.values()[random.nextInt(PillColor.values().length)];
-			
-			x = 5+i; //random.nextInt((10 - 0) + 1) + 0;
-			y = 10+i; //random.nextInt((20 - 0) + 1) + 0;
-			
-			System.out.println("x:"+x);
-			System.out.println("y:"+y);
-			drawTile(virusColor, (x) * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
-			setTile(x, y, virusColor);
+			for(int i = 0; i < VIRUS_QUANTITY; i++){
+				
+				virusColor = PillColor.values()[random.nextInt(PillColor.values().length)];
+				
+				x = (i*3) + random.nextInt(COL_COUNT/3);
+				y = 10 + random.nextInt(VISIBLE_ROW_COUNT/2);
+				
+				System.out.println("x,y:["+x+","+y+"]");
+				//drawTile(virusColor, (x) * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+				setTile(x, y, virusColor);
+			}
 		}
 	}
 	
@@ -527,6 +524,14 @@ public class BoardPanel extends JPanel {
 
 	public void setPlayerNumber(int playerNumber) {
 		this.playerNumber = playerNumber;
+	}
+
+	public boolean isVirusSet() {
+		return virusSet;
+	}
+
+	public void setVirusSet(boolean virusSet) {
+		this.virusSet = virusSet;
 	}
 
 }

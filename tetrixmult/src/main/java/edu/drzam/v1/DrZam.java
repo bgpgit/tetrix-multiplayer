@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 
 import com.google.gson.Gson;
 
+import java.awt.Graphics;
+
 public class DrZam extends JFrame {
 	
 	/**
