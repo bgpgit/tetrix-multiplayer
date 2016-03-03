@@ -5,10 +5,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Calendar;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
 import com.google.gson.Gson;
+
+import edu.drzam.v1.PillColor;
 
 public class BoardPanel extends JPanel {
 	
@@ -100,6 +103,17 @@ public class BoardPanel extends JPanel {
 	 * The smaller font to display.
 	 */
 	private static final Font SMALL_FONT = new Font("Tahoma", Font.BOLD, 12);
+	
+	/**
+	 *The quantity of virus to be shown 
+	 */
+	public static final int VIRUS_QUANTITY = 3;
+	
+	/**
+	 * The random number generator. This is used to
+	 * spit out pieces randomly.
+	 */
+	private Random random;
 	
 	/**
 	 * The DrZam instance.
@@ -374,6 +388,12 @@ public class BoardPanel extends JPanel {
 				}
 			}
 			
+			drawTile(type, (5) * TILE_SIZE, (15 - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+			setTile(5, 15, type);
+			System.out.println("---------------------------Inicia drawVirus---------------------");
+			drawVirus(g);
+			System.out.println("---------------------------Termina drawVirus---------------------");
+			
 			/*
 			 * Draw the ghost (semi-transparent piece that shows where the current piece will land). I couldn't think of
 			 * a better way to implement this so it'll have to do for now. We simply take the current position and move
@@ -463,6 +483,36 @@ public class BoardPanel extends JPanel {
 		g.setColor(light);
 	}
 
+
+	/**
+	 * Draw a virus onto the board
+	 * @param virus Color of virus to be draw
+	 * @param tileSize
+	 * @param g The graphics object.
+	 */
+	private void drawVirus(Graphics g){
+		PillColor virusColor = null;
+		int x = 0;
+		int y= 0;
+		random = new Random();
+		
+		x = random.nextInt((10 - 0) + 1) + 0;
+		y = random.nextInt((20 - 0) + 1) + 0;
+		
+		for(int i = 0; i < VIRUS_QUANTITY; i++){
+			
+			virusColor = PillColor.values()[random.nextInt(PillColor.values().length)];
+			
+			x = 5+i; //random.nextInt((10 - 0) + 1) + 0;
+			y = 10+i; //random.nextInt((20 - 0) + 1) + 0;
+			
+			System.out.println("x:"+x);
+			System.out.println("y:"+y);
+			drawTile(virusColor, (x) * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+			setTile(x, y, virusColor);
+		}
+	}
+	
 	public boolean isGameOver() {
 		return isGameOver;
 	}

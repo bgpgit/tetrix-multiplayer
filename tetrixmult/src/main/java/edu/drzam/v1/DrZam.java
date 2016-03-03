@@ -16,12 +16,6 @@ import javax.swing.JFrame;
 
 import com.google.gson.Gson;
 
-/**
- * The {@code DrZam} class is responsible for handling much of the game logic and
- * reading user input.
- * @author Brendan Jones
- *
- */
 public class DrZam extends JFrame {
 	
 	/**
@@ -43,7 +37,10 @@ public class DrZam extends JFrame {
 	 * The BoardPanel instance.
 	 */
 	private BoardPanel liveBoard;
-	
+
+	/**
+	 * The ReplySidePanel instance.
+	 */
 	private ReplySidePanel replyBoard;
 	
 	/**
