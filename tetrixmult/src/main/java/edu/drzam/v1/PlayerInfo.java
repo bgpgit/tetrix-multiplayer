@@ -10,6 +10,7 @@ public class PlayerInfo {
 	private int pieceRow;
 	private int rotation;
 	private PillColor[][] tiles;
+	private boolean gameOver;
 	
 	public long getId() {
 		return id;
@@ -58,6 +59,12 @@ public class PlayerInfo {
 	}
 	public void setPlayer(int player) {
 		this.player = player;
+	}
+	public boolean isGameOver() {
+		return gameOver;
+	}
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
 	}
 	
 	

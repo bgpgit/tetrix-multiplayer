@@ -10,9 +10,6 @@ import java.net.Socket;
 import java.util.Properties;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class DrZamServer implements Runnable {
 	
@@ -22,14 +19,15 @@ public class DrZamServer implements Runnable {
 	Properties prop;
 	private int mainSocketPort;
 	
+	private Config config;
 	private PlayerInfo player;
 	
 	private String infoFirstPlayer;
 	private String infoSecondPlayer;
 	
 	public DrZamServer() {	
-//		this.prop = inProperties;
-		this.mainSocketPort = 7003;
+		this.config = new Config();
+		this.mainSocketPort = config.getServerPort();
 	}
 	
 	@Override
@@ -42,7 +40,7 @@ public class DrZamServer implements Runnable {
 		} catch (IOException e) {return;}
 
 		while (true) {
-			System.out.println("Waiting for requests...");
+			//System.out.println("Waiting for requests...");
 			
 			try {
 				connection = socketServer.accept();
@@ -58,19 +56,18 @@ public class DrZamServer implements Runnable {
 
 				String messageResponse = new String();
 				if (player.getPlayer()==1) {
-					System.out.println("Request accepted from First Player...");
+					//System.out.println("Request accepted from First Player...");
 					setInfoFirstPlayer(strBuffer.toString());
-					System.out.println("Message from First Player: " + getInfoFirstPlayer());
-					//messageResponse = getInfoSecondPlayer();
+					//System.out.println("Message from First Player: " + getInfoFirstPlayer());
 					messageResponse = getInfoSecondPlayer();
-					System.out.println("Last Message from Second Player: " + messageResponse);
+					//System.out.println("Last Message from Second Player: " + messageResponse);
 				} else {
-					System.out.println("Request accepted from Second Player...");
+					//System.out.println("Request accepted from Second Player...");
 					//System.out.println("InfoSecondPlayer1:"+getInfoSecondPlayer());
 					setInfoSecondPlayer(strBuffer.toString());
-					System.out.println("Message from Second Player: " + getInfoSecondPlayer());
+					//System.out.println("Message from Second Player: " + getInfoSecondPlayer());
 					messageResponse = getInfoFirstPlayer();
-					System.out.println("Last Message from First Player: " + messageResponse);
+					//System.out.println("Last Message from First Player: " + messageResponse);
 				}
 				
 				BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());

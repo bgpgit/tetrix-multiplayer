@@ -15,7 +15,9 @@ public class BoardPanel extends JPanel {
 	/**
 	 * Number of player that joins the game
 	 */
-	public static int player = 1;
+	private int playerNumber;
+	
+	private boolean isGameOver;
 	
 	/**
 	 * Serial Version UID.
@@ -206,11 +208,12 @@ public class BoardPanel extends JPanel {
 	}
 
 	public String prepareLiveBoardInfo() {
-		System.out.println("sincInfo");
+		//System.out.println("sincInfo");
 		PlayerInfo info = new PlayerInfo();
 		info.setId(Calendar.getInstance().getTimeInMillis());
-		info.setPlayer(BoardPanel.player);
+		info.setPlayer(getPlayerNumber());
 		info.setScore(0);
+		info.setGameOver(isGameOver());
 		
 		info.setType(drzam.getPieceType());
 		info.setPieceCol(drzam.getPieceCol());
@@ -220,7 +223,7 @@ public class BoardPanel extends JPanel {
 		info.setTiles(tiles);
 		Gson gson = new Gson();
 		setjSonLiveInfo(gson.toJson(info));
-		System.out.println("jsonString:"+getjSonLiveInfo());
+		//System.out.println("jsonString:"+getjSonLiveInfo());
 		return getjSonLiveInfo();
 	}
 	
@@ -331,7 +334,7 @@ public class BoardPanel extends JPanel {
 			 * we can handle them together and just use a ternary operator to change
 			 * the messages that are displayed.
 			 */
-			String msg = drzam.isNewGame() ? "DR. ZAM" : "GAME OVER";
+			String msg = drzam.isNewGame() ? "DR. ZAM" : (isGameOver()?"GAME OVER":"ERES EL GANADOR");
 			g.drawString(msg, CENTER_X - g.getFontMetrics().stringWidth(msg) / 2, 150);
 			g.setFont(SMALL_FONT);
 			msg = "Press Enter to Play" + (drzam.isNewGame() ? "" : " Again");
@@ -458,6 +461,22 @@ public class BoardPanel extends JPanel {
 		 * looking diagonal where the light and dark shading meet.
 		 */
 		g.setColor(light);
+	}
+
+	public boolean isGameOver() {
+		return isGameOver;
+	}
+
+	public void setGameOver(boolean isGameOver) {
+		this.isGameOver = isGameOver;
+	}
+
+	public int getPlayerNumber() {
+		return playerNumber;
+	}
+
+	public void setPlayerNumber(int playerNumber) {
+		this.playerNumber = playerNumber;
 	}
 
 }

@@ -112,24 +112,7 @@ public class ReplySidePanel extends JPanel {
 			
 			Gson gson = new Gson();
 			setInfoPlayer(gson.fromJson(jsonInfoLive, PlayerInfo.class));
-			
-//			System.out.println("id:"+info.getId());
-//			System.out.println("score:"+info.getId());		
-			//System.out.println("tiles:"+info.getTiles());
-			
-//			for(int x = 0; x < COL_COUNT; x++) {
-//				System.out.print("col["+x+"]tiles[");
-//				for(int y = 0; y < ROW_COUNT-HIDDEN_ROW_COUNT; y++) {
-//					if (info.getTiles()[y][x]!=null) {
-//						System.out.print(info.getTiles()[y][x]+",");
-//					} else {
-//						System.out.print("0,");
-//					}
-//					//setTile(x, y, incTiles[y][]);
-//				}
-//				System.out.print("]\n");
-//			}
-			
+
 			for(int x = 0; x < COL_COUNT; x++) {
 				//System.out.print("col["+x+"][");
 				for(int y = HIDDEN_ROW_COUNT; y < ROW_COUNT; y++) {
@@ -137,12 +120,8 @@ public class ReplySidePanel extends JPanel {
 						setTile(x, y, getInfoPlayer().getTiles()[y][x]);
 					}
 				}
-				//System.out.print("]\n");
 			}
 		}
-		//Gson gson = new Gson();
-		//String jsonString = gson.toJson(info);
-		//System.out.println("jsonString:"+jsonString);
 		
 	}
 	

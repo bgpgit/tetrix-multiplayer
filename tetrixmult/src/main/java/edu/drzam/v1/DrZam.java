@@ -14,6 +14,8 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.google.gson.Gson;
+
 /**
  * The {@code DrZam} class is responsible for handling much of the game logic and
  * reading user input.
@@ -122,6 +124,8 @@ public class DrZam extends JFrame {
 	 */
 	private float gameSpeed;
 	
+	private Config config;
+	
 	/**
 	 * Creates a new DrZam instance. Sets up the window's properties,
 	 * and adds a controller listener.
@@ -131,6 +135,13 @@ public class DrZam extends JFrame {
 		 * Set the basic properties of the window.
 		 */
 		super("Dr. Zam");
+		
+		config = new Config();
+		
+		if (config.getPlayerNumber() == 1) {
+			Thread mainserver = new Thread(new DrZamServer());
+			mainserver.start();
+		}
 		
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -142,6 +153,7 @@ public class DrZam extends JFrame {
 		this.liveBoard = new BoardPanel(this);
 		this.replyBoard = new ReplySidePanel(this);
 		this.centerPanel = new SidePanel(this);
+		this.liveBoard.setPlayerNumber(config.getPlayerNumber());
 		
 		/*
 		 * Add the BoardPanel and SidePanel instances to the window.
@@ -269,7 +281,7 @@ public class DrZam extends JFrame {
 		this.logicTimer = new Clock(gameSpeed);
 		logicTimer.setPaused(true);
 		
-		if (BoardPanel.player == 1) {
+		if (config.getPlayerNumber() == 1) {
 			Thread mainserver = new Thread(new DrZamServer());
 			mainserver.start();
 		}
@@ -289,6 +301,12 @@ public class DrZam extends JFrame {
 			if(logicTimer.hasElapsedCycle()) {
 				String replyBoardInfo = synchronizeReplyBoard(liveBoard.prepareLiveBoardInfo());
 				if (replyBoardInfo!=null) {
+					Gson gson = new Gson();
+					PlayerInfo info = gson.fromJson(replyBoardInfo, PlayerInfo.class);
+					if (info!=null && info.isGameOver()) {
+						System.out.println(liveBoard.getPlayerNumber()+": GAME OVER VS");
+						this.isGameOver = true;
+					}
 					replyBoard.sinchronizeReplyBoard(replyBoardInfo);
 				}
 				updateGame();
@@ -318,15 +336,14 @@ public class DrZam extends JFrame {
 	
 	private String synchronizeReplyBoard(String jSonLiveBoardInfo) {
 		String jSonReplyBoardInfo = null;
-		try {
+		try {			
 			String host = new String();
-			if (BoardPanel.player == 1)
-				host = "127.0.0.1";
+			if (config.getPlayerNumber()==1)
+				host = config.getPlayerOneIp();
 			else
-				host = "192.168.14.121";
-			
+				host = config.getPlayerTwoIp();
 			InetAddress address = InetAddress.getByName(host);
-			Socket connection = new Socket(address, 7003);
+			Socket connection = new Socket(address, config.getServerPort());
 			
 			BufferedOutputStream outputStream = new BufferedOutputStream(connection.getOutputStream());
 			
@@ -430,7 +447,8 @@ public class DrZam extends JFrame {
 		this.gameSpeed = 1.0f;
 		this.nextType = PillColor.values()[random.nextInt(TYPE_COUNT)];
 		this.isNewGame = false;
-		this.isGameOver = false;		
+		this.isGameOver = false;
+		liveBoard.setGameOver(false);
 		liveBoard.clear();
 		logicTimer.reset();
 		logicTimer.setCyclesPerSecond(gameSpeed);
@@ -458,7 +476,22 @@ public class DrZam extends JFrame {
 		 */
 		if(!liveBoard.isValidAndEmpty(currentType, currentCol, currentRow, currentRotation)) {
 			this.isGameOver = true;
+			liveBoard.setGameOver(true);
+			System.out.println(liveBoard.getPlayerNumber()+": GAME OVER");
+			String xx = liveBoard.prepareLiveBoardInfo();
+			System.out.println("xx:"+xx);
+			String replyBoardInfo = synchronizeReplyBoard(xx);
+			if (replyBoardInfo!=null) {
+				Gson gson = new Gson();
+				PlayerInfo info = gson.fromJson(replyBoardInfo, PlayerInfo.class);
+				if (info!=null && info.isGameOver()) {
+					this.isGameOver = true;
+				}
+				replyBoard.sinchronizeReplyBoard(replyBoardInfo);
+				
+			}
 			logicTimer.setPaused(true);
+			
 		}		
 	}
 	
