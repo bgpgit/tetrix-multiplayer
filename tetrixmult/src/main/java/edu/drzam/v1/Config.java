@@ -6,36 +6,41 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-	
+
 	/**
 	 * Number of player in game
 	 */
 	private int playerNumber;
-	
+
 	/**
 	 * Port for communication
 	 */
 	private int serverPort;
-	
+
 	/**
 	 * IP from first player
 	 */
 	private String playerOneIp;
-	
+
 	/**
 	 * IP from second player
 	 */
 	private String playerTwoIp;
-	
+
 	/**
 	 * Defines game configuration from conf.properties
 	 */
 	public Config() {
-		try{
+		try {
 			Properties prop = new Properties();
 			InputStream is = getClass().getClassLoader().getResourceAsStream("conf.properties");
-			if (is!=null) {
-				prop.load(is);
+
+			if (is != null) {
+				try {
+					prop.load(is);
+				} finally {
+					is.close();
+				}
 				this.playerNumber = Integer.parseInt(prop.getProperty("playerNumber"));
 				this.serverPort = Integer.parseInt(prop.getProperty("serverPort"));
 				this.playerOneIp = prop.getProperty("playerOneIp");
@@ -43,7 +48,7 @@ public class Config {
 			} else {
 				throw new FileNotFoundException("Properties file not found.");
 			}
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

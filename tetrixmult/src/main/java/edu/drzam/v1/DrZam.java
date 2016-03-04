@@ -65,9 +65,9 @@ public class DrZam extends JFrame {
 	private boolean isGameOver;
 
 	/**
-//	 * The current level we're on.
-//	 */
-//	private int level;
+	 * // * The current level we're on. //
+	 */
+	// private int level;
 
 	/**
 	 * The current score.
@@ -133,11 +133,6 @@ public class DrZam extends JFrame {
 		super("Dr. Zam");
 
 		config = new Config();
-
-		if (config.getPlayerNumber() == 1) {
-			Thread mainserver = new Thread(new DrZamServer());
-			mainserver.start();
-		}
 
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -420,7 +415,7 @@ public class DrZam extends JFrame {
 			 * Update the difficulty level. This has no effect on the game, and
 			 * is only used in the "Level" string in the SidePanel.
 			 */
-//			level = (int) (gameSpeed * 1.70f);
+			// level = (int) (gameSpeed * 1.70f);
 
 			/*
 			 * Spawn a new piece to control.
@@ -443,7 +438,7 @@ public class DrZam extends JFrame {
 	 * game.
 	 */
 	private void resetGame() {
-//		this.level = 1;
+		// this.level = 1;
 		this.score = 0;
 		this.gameSpeed = 1.0f;
 		this.nextType = PillColor.values()[random.nextInt(TYPE_COUNT)];
@@ -538,9 +533,9 @@ public class DrZam extends JFrame {
 	 * 
 	 * @return The level.
 	 */
-//	public int getLevel() {
-//		return level;
-//	}
+	// public int getLevel() {
+	// return level;
+	// }
 
 	/**
 	 * Gets the current type of piece we're using.
