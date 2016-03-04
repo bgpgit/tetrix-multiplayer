@@ -14,11 +14,15 @@ import com.google.gson.Gson;
 public class BoardPanel extends JPanel {
 
 	private static final int CONSECUTIVE_PILLS_TO_DELETE = 4;
+	
 	/**
 	 * Number of player that joins the game
 	 */
 	private int playerNumber;
 
+	/**
+	 * Indicates if game is over
+	 */
 	private boolean isGameOver;
 
 	/**
@@ -27,14 +31,12 @@ public class BoardPanel extends JPanel {
 	private static final long serialVersionUID = 5055679736784226108L;
 
 	/**
-	 * Minimum color component values for tiles. This is required if we want to
-	 * show both light and dark shading on our tiles.
+	 * Minimum color component values for tiles. 
 	 */
 	public static final int COLOR_MIN = 35;
 
 	/**
-	 * Maximum color component values for tiles. This is required if we want to
-	 * show both light and dark shading on our tiles.
+	 * Maximum color component values for tiles. 
 	 */
 	public static final int COLOR_MAX = 255 - COLOR_MIN;
 
@@ -66,7 +68,7 @@ public class BoardPanel extends JPanel {
 	/**
 	 * The number of pixels that a tile takes up.
 	 */
-	public static final int TILE_SIZE = 30;
+	public static final int PILL_VIEW_SIZE = 30;
 
 	/**
 	 * The width of the shading on the tiles.
@@ -76,22 +78,22 @@ public class BoardPanel extends JPanel {
 	/**
 	 * The central x coordinate on the game board.
 	 */
-	private static final int CENTER_X = COL_COUNT * TILE_SIZE / 2;
+	private static final int CENTER_X = COL_COUNT * PILL_VIEW_SIZE / 2;
 
 	/**
 	 * The central y coordinate on the game board.
 	 */
-	private static final int CENTER_Y = VISIBLE_ROW_COUNT * TILE_SIZE / 2;
+	private static final int CENTER_Y = VISIBLE_ROW_COUNT * PILL_VIEW_SIZE / 2;
 
 	/**
 	 * The total width of the panel.
 	 */
-	public static final int PANEL_WIDTH = COL_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
+	public static final int PANEL_WIDTH = COL_COUNT * PILL_VIEW_SIZE + BORDER_WIDTH * 2;
 
 	/**
 	 * The total height of the panel.
 	 */
-	public static final int PANEL_HEIGHT = VISIBLE_ROW_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
+	public static final int PANEL_HEIGHT = VISIBLE_ROW_COUNT * PILL_VIEW_SIZE + BORDER_WIDTH * 2;
 
 	/**
 	 * The larger font to display.
@@ -122,6 +124,10 @@ public class BoardPanel extends JPanel {
 	 * The tiles that make up the board.
 	 */
 	private PillColor[][] tiles;
+	
+	/**
+	 * Indicates if virus are set
+	 */
 	private boolean virusSet;
 
 	/**
@@ -387,7 +393,7 @@ public class BoardPanel extends JPanel {
 				for (int y = HIDDEN_ROW_COUNT; y < ROW_COUNT; y++) {
 					PillColor tile = getTile(x, y);
 					if (tile != null) {
-						drawTile(tile, x * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+						drawTile(tile, x * PILL_VIEW_SIZE, (y - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE, g);
 					}
 				}
 			}
@@ -404,11 +410,13 @@ public class BoardPanel extends JPanel {
 			int pieceRow = drzam.getPieceRow();
 			int rotation = drzam.getPieceRotation();
 
-			// Draw the piece onto the board.
+			/*
+			 *  Draw the piece onto the board.
+			 */
 			for (int col = 0; col < type.getDimension(); col++) {
 				for (int row = 0; row < type.getDimension(); row++) {
 					if (pieceRow + row >= 2 && type.isTile(col, row, rotation)) {
-						drawTile(type, (pieceCol + col) * TILE_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * TILE_SIZE,
+						drawTile(type, (pieceCol + col) * PILL_VIEW_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE,
 								g);
 					}
 				}
@@ -437,8 +445,8 @@ public class BoardPanel extends JPanel {
 				for (int col = 0; col < type.getDimension(); col++) {
 					for (int row = 0; row < type.getDimension(); row++) {
 						if (lowest + row >= 2 && type.isTile(col, row, rotation)) {
-							drawTile(base, base.brighter(), base.darker(), (pieceCol + col) * TILE_SIZE,
-									(lowest + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+							drawTile(base, base.brighter(), base.darker(), (pieceCol + col) * PILL_VIEW_SIZE,
+									(lowest + row - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE, g);
 						}
 					}
 				}
@@ -454,8 +462,8 @@ public class BoardPanel extends JPanel {
 			g.setColor(Color.DARK_GRAY);
 			for (int x = 0; x < COL_COUNT; x++) {
 				for (int y = 0; y < VISIBLE_ROW_COUNT; y++) {
-					g.drawLine(0, y * TILE_SIZE, COL_COUNT * TILE_SIZE, y * TILE_SIZE);
-					g.drawLine(x * TILE_SIZE, 0, x * TILE_SIZE, VISIBLE_ROW_COUNT * TILE_SIZE);
+					g.drawLine(0, y * PILL_VIEW_SIZE, COL_COUNT * PILL_VIEW_SIZE, y * PILL_VIEW_SIZE);
+					g.drawLine(x * PILL_VIEW_SIZE, 0, x * PILL_VIEW_SIZE, VISIBLE_ROW_COUNT * PILL_VIEW_SIZE);
 				}
 			}
 		}
@@ -464,7 +472,7 @@ public class BoardPanel extends JPanel {
 		 * Draw the outline.
 		 */
 		g.setColor(Color.WHITE);
-		g.drawRect(0, 0, TILE_SIZE * COL_COUNT, TILE_SIZE * VISIBLE_ROW_COUNT);
+		g.drawRect(0, 0, PILL_VIEW_SIZE * COL_COUNT, PILL_VIEW_SIZE * VISIBLE_ROW_COUNT);
 	}
 
 	/**
@@ -505,7 +513,7 @@ public class BoardPanel extends JPanel {
 		 * Fill the entire tile with the base color.
 		 */
 		g.setColor(base);
-		g.fillOval(x, y, TILE_SIZE, TILE_SIZE);
+		g.fillOval(x, y, PILL_VIEW_SIZE, PILL_VIEW_SIZE);
 
 		/*
 		 * Fill the bottom and right edges of the tile with the dark shading
@@ -523,12 +531,6 @@ public class BoardPanel extends JPanel {
 
 	/**
 	 * Draw a virus onto the board
-	 * 
-	 * @param virus
-	 *            Color of virus to be draw
-	 * @param tileSize
-	 * @param g
-	 *            The graphics object.
 	 */
 	public void drawVirus() {
 		if (!isVirusSet()) {
@@ -546,8 +548,8 @@ public class BoardPanel extends JPanel {
 				y = 10 + random.nextInt(VISIBLE_ROW_COUNT / 2);
 
 				System.out.println("x,y:[" + x + "," + y + "]");
-				// drawTile(virusColor, (x) * TILE_SIZE, (y - HIDDEN_ROW_COUNT)
-				// * TILE_SIZE, g);
+				// drawTile(virusColor, (x) * PILL_VIEW_SIZE, (y - HIDDEN_ROW_COUNT)
+				// * PILL_VIEW_SIZE, g);
 				setTile(x, y, virusColor);
 			}
 		}

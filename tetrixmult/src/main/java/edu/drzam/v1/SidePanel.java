@@ -17,7 +17,7 @@ public class SidePanel extends JPanel {
 	/**
 	 * The dimensions of each tile on the next piece preview.
 	 */
-	private static final int TILE_SIZE = BoardPanel.TILE_SIZE >> 1;
+	private static final int PILL_VIEW_SIZE = BoardPanel.PILL_VIEW_SIZE >> 1;
 	
 	/**
 	 * The width of the shading on each tile on the next piece preview.
@@ -43,7 +43,7 @@ public class SidePanel extends JPanel {
 	/**
 	 * The size of the next piece preview box.
 	 */
-	private static final int SQUARE_SIZE = (TILE_SIZE * TILE_COUNT >> 1);
+	private static final int SQUARE_SIZE = (PILL_VIEW_SIZE * TILE_COUNT >> 1);
 	
 	/**
 	 * The number of pixels used on a small insets (generally used for categories).
@@ -179,8 +179,8 @@ public class SidePanel extends JPanel {
 			/*
 			 * Calculate the top left corner (origin) of the piece.
 			 */
-			int startX = (SQUARE_CENTER_X - (cols * TILE_SIZE / 2));
-			int startY = (SQUARE_CENTER_Y - (rows * TILE_SIZE / 2));
+			int startX = (SQUARE_CENTER_X - (cols * PILL_VIEW_SIZE / 2));
+			int startY = (SQUARE_CENTER_Y - (rows * PILL_VIEW_SIZE / 2));
 		
 			/*
 			 * Get the insets for the preview. The default
@@ -195,7 +195,7 @@ public class SidePanel extends JPanel {
 			for(int row = 0; row < dimension; row++) {
 				for(int col = 0; col < dimension; col++) {
 					if(type.isTile(col, row, 0)) {
-						drawTile(type, startX + ((col - left) * TILE_SIZE), startY + ((row - top) * TILE_SIZE), g);
+						drawTile(type, startX + ((col - left) * PILL_VIEW_SIZE), startY + ((row - top) * PILL_VIEW_SIZE), g);
 					}
 				}
 			}
@@ -214,26 +214,7 @@ public class SidePanel extends JPanel {
 		 * Fill the entire tile with the base color.
 		 */
 		g.setColor(type.getBaseColor());
-//		g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-//		
-//		/*
-//		 * Fill the bottom and right edges of the tile with the dark shading color.
-//		 */
-//		g.setColor(type.getDarkColor());
-//		g.fillRect(x, y + TILE_SIZE - SHADE_WIDTH, TILE_SIZE, SHADE_WIDTH);
-//		g.fillRect(x + TILE_SIZE - SHADE_WIDTH, y, SHADE_WIDTH, TILE_SIZE);
-//		
-//		/*
-//		 * Fill the top and left edges with the light shading. We draw a single line
-//		 * for each row or column rather than a rectangle so that we can draw a nice
-//		 * looking diagonal where the light and dark shading meet.
-//		 */
-//		g.setColor(type.getLightColor());
-//		for(int i = 0; i < SHADE_WIDTH; i++) {
-//			g.drawLine(x, y + i, x + TILE_SIZE - i - 1, y + i);
-//			g.drawLine(x + i, y, x + i, y + TILE_SIZE - i - 1);
-//		}
-		g.fillOval(x, y, TILE_SIZE, TILE_SIZE);
+		g.fillOval(x, y, PILL_VIEW_SIZE, PILL_VIEW_SIZE);
 	}
 	
 }

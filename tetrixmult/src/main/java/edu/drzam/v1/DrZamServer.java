@@ -13,7 +13,9 @@ import com.google.gson.Gson;
 
 public class DrZamServer implements Runnable {
 	
-	
+	/**
+	 * ServerSocket instance
+	 */
 	ServerSocket socketServer;
 	Socket connection;
 	Properties prop;
@@ -22,6 +24,9 @@ public class DrZamServer implements Runnable {
 	private Config config;
 	private PlayerInfo player;
 	
+	/**
+	 * Sends players information
+	 */
 	private String infoFirstPlayer;
 	private String infoSecondPlayer;
 	

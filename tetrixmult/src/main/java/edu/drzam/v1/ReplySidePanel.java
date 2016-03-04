@@ -44,7 +44,7 @@ public class ReplySidePanel extends JPanel {
 	/**
 	 * The number of pixels that a tile takes up.
 	 */
-	public static final int TILE_SIZE = 30;
+	public static final int PILL_VIEW_SIZE = 30;
 	
 	/**
 	 * The width of the shading on the tiles.
@@ -54,22 +54,22 @@ public class ReplySidePanel extends JPanel {
 	/**
 	 * The central x coordinate on the game board.
 	 */
-	private static final int CENTER_X = COL_COUNT * TILE_SIZE / 2;
+	private static final int CENTER_X = COL_COUNT * PILL_VIEW_SIZE / 2;
 	
 	/**
 	 * The central y coordinate on the game board.
 	 */
-	private static final int CENTER_Y = VISIBLE_ROW_COUNT * TILE_SIZE / 2;
+	private static final int CENTER_Y = VISIBLE_ROW_COUNT * PILL_VIEW_SIZE / 2;
 		
 	/**
 	 * The total width of the panel.
 	 */
-	public static final int PANEL_WIDTH = COL_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
+	public static final int PANEL_WIDTH = COL_COUNT * PILL_VIEW_SIZE + BORDER_WIDTH * 2;
 	
 	/**
 	 * The total height of the panel.
 	 */
-	public static final int PANEL_HEIGHT = VISIBLE_ROW_COUNT * TILE_SIZE + BORDER_WIDTH * 2;
+	public static final int PANEL_HEIGHT = VISIBLE_ROW_COUNT * PILL_VIEW_SIZE + BORDER_WIDTH * 2;
 	
 	/**
 	 * The larger font to display.
@@ -167,7 +167,7 @@ public class ReplySidePanel extends JPanel {
 				for(int col = 0; col < type.getDimension(); col++) {
 					for(int row = 0; row < type.getDimension(); row++) {
 						if(pieceRow + row >= 2 && type.isTile(col, row, rotation)) {
-							drawTile(type, (pieceCol + col) * TILE_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+							drawTile(type, (pieceCol + col) * PILL_VIEW_SIZE, (pieceRow + row - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE, g);
 						}
 					}
 				}
@@ -179,7 +179,7 @@ public class ReplySidePanel extends JPanel {
 					for(int y = HIDDEN_ROW_COUNT; y < ROW_COUNT; y++) {
 						PillColor tile = getTile(x, y);
 						if(tile != null) {
-							drawTile(tile, x * TILE_SIZE, (y - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+							drawTile(tile, x * PILL_VIEW_SIZE, (y - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE, g);
 						}
 					}
 				}
@@ -204,7 +204,7 @@ public class ReplySidePanel extends JPanel {
 //					for(int col = 0; col < type.getDimension(); col++) {
 //						for(int row = 0; row < type.getDimension(); row++) {
 //							if(lowest + row >= 2 && type.isTile(col, row, rotation)) {
-//								drawTile(base, base.brighter(), base.darker(), (pieceCol + col) * TILE_SIZE, (lowest + row - HIDDEN_ROW_COUNT) * TILE_SIZE, g);
+//								drawTile(base, base.brighter(), base.darker(), (pieceCol + col) * PILL_VIEW_SIZE, (lowest + row - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE, g);
 //							}
 //						}
 //					}
@@ -221,8 +221,8 @@ public class ReplySidePanel extends JPanel {
 			g.setColor(Color.DARK_GRAY);
 			for(int x = 0; x < COL_COUNT; x++) {
 				for(int y = 0; y < VISIBLE_ROW_COUNT; y++) {
-					g.drawLine(0, y * TILE_SIZE, COL_COUNT * TILE_SIZE, y * TILE_SIZE);
-					g.drawLine(x * TILE_SIZE, 0, x * TILE_SIZE, VISIBLE_ROW_COUNT * TILE_SIZE);
+					g.drawLine(0, y * PILL_VIEW_SIZE, COL_COUNT * PILL_VIEW_SIZE, y * PILL_VIEW_SIZE);
+					g.drawLine(x * PILL_VIEW_SIZE, 0, x * PILL_VIEW_SIZE, VISIBLE_ROW_COUNT * PILL_VIEW_SIZE);
 				}
 			}
 		}
@@ -231,7 +231,7 @@ public class ReplySidePanel extends JPanel {
 		 * Draw the outline.
 		 */
 		g.setColor(Color.WHITE);
-		g.drawRect(0, 0, TILE_SIZE * COL_COUNT, TILE_SIZE * VISIBLE_ROW_COUNT);
+		g.drawRect(0, 0, PILL_VIEW_SIZE * COL_COUNT, PILL_VIEW_SIZE * VISIBLE_ROW_COUNT);
 	}
 	
 	/**
@@ -260,7 +260,7 @@ public class ReplySidePanel extends JPanel {
 		 * Fill the entire tile with the base color.
 		 */
 		g.setColor(base);
-		g.fillOval(x, y, TILE_SIZE, TILE_SIZE);
+		g.fillOval(x, y, PILL_VIEW_SIZE, PILL_VIEW_SIZE);
 		
 		/*
 		 * Fill the bottom and right edges of the tile with the dark shading color.

@@ -7,11 +7,29 @@ import java.util.Properties;
 
 public class Config {
 	
+	/**
+	 * Number of player in game
+	 */
 	private int playerNumber;
+	
+	/**
+	 * Port for communication
+	 */
 	private int serverPort;
+	
+	/**
+	 * IP from first player
+	 */
 	private String playerOneIp;
+	
+	/**
+	 * IP from second player
+	 */
 	private String playerTwoIp;
 	
+	/**
+	 * Defines game configuration from conf.properties
+	 */
 	public Config() {
 		try{
 			Properties prop = new Properties();
