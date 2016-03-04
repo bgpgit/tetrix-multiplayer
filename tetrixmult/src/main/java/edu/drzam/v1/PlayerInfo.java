@@ -1,15 +1,55 @@
 package edu.drzam.v1;
 
+/**
+ * Contains the Player Information DTO 
+ * @author usuario
+ *
+ */
 public class PlayerInfo {
 	
+	/**
+	 * Player ID
+	 */
 	private long id;
+	
+	/**
+	 * Player number
+	 */
 	private int player;
+	
+	/**
+	 * Player score 
+	 */
 	private long score;
+	
+	/**
+	 * Pill Color type
+	 */
 	private PillColor type;
+	
+	/**
+	 * Column of piece
+	 */
 	private int pieceCol;
+	
+	/**
+	 * Row of piece
+	 */
 	private int pieceRow;
+	
+	/**
+	 * Rotation of piece
+	 */
 	private int rotation;
+	
+	/**
+	 * Pill Color instance
+	 */
 	private PillColor[][] tiles;
+	
+	/**
+	 * Indicates when game ends
+	 */
 	private boolean gameOver;
 	
 	public long getId() {
@@ -66,8 +106,4 @@ public class PlayerInfo {
 	public void setGameOver(boolean gameOver) {
 		this.gameOver = gameOver;
 	}
-	
-	
-	
-	
 }

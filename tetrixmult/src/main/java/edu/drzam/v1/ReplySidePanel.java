@@ -129,7 +129,9 @@ public class ReplySidePanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		//This helps simplify the positioning of things.
+		/*
+		 * This helps simplify the positioning of things.
+		 */
 		g.translate(BORDER_WIDTH, BORDER_WIDTH);
 		
 		/*

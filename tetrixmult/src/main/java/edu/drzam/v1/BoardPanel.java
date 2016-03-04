@@ -429,30 +429,30 @@ public class BoardPanel extends JPanel {
 			 * current position and move down until we hit a row that would
 			 * cause a collision.
 			 */
-			Color base = type.getBaseColor();
-			base = new Color(base.getRed(), base.getGreen(), base.getBlue(), 20);
-			for (int lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
-				// If no collision is detected, try the next row.
-				if (isValidAndEmpty(type, pieceCol, lowest, rotation)) {
-					continue;
-				}
-
-				// Draw the ghost one row higher than the one the collision took
-				// place at.
-				lowest--;
-
-				// Draw the ghost piece.
-				for (int col = 0; col < type.getDimension(); col++) {
-					for (int row = 0; row < type.getDimension(); row++) {
-						if (lowest + row >= 2 && type.isTile(col, row, rotation)) {
-							drawTile(base, base.brighter(), base.darker(), (pieceCol + col) * PILL_VIEW_SIZE,
-									(lowest + row - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE, g);
-						}
-					}
-				}
-
-				break;
-			}
+//			Color base = type.getBaseColor();
+//			base = new Color(base.getRed(), base.getGreen(), base.getBlue(), 20);
+//			for (int lowest = pieceRow; lowest < ROW_COUNT; lowest++) {
+//				// If no collision is detected, try the next row.
+//				if (isValidAndEmpty(type, pieceCol, lowest, rotation)) {
+//					continue;
+//				}
+//
+//				// Draw the ghost one row higher than the one the collision took
+//				// place at.
+//				lowest--;
+//
+//				// Draw the ghost piece.
+//				for (int col = 0; col < type.getDimension(); col++) {
+//					for (int row = 0; row < type.getDimension(); row++) {
+//						if (lowest + row >= 2 && type.isTile(col, row, rotation)) {
+//							drawTile(base, base.brighter(), base.darker(), (pieceCol + col) * PILL_VIEW_SIZE,
+//									(lowest + row - HIDDEN_ROW_COUNT) * PILL_VIEW_SIZE, g);
+//						}
+//					}
+//				}
+//
+//				break;
+//			}
 
 			/*
 			 * Draw the background grid above the pieces (serves as a useful

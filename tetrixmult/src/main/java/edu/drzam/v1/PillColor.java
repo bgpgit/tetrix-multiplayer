@@ -5,7 +5,7 @@ import java.awt.Color;
 public enum PillColor {
 
 	/**
-	 * Piece Color PillLB
+	 * Piece Color Pill Ligth Blue
 	 */
 	
 	TypePillLB(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
@@ -15,7 +15,7 @@ public enum PillColor {
 	}),
 	
 	/**
-	 * Piece Color PillBlue
+	 * Piece Color Pill Blue
 	 */
 	
 	TypePillBlue(new Color(BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
@@ -25,7 +25,7 @@ public enum PillColor {
 	}),
 	
 	/**
-	 * Piece Color PillPink
+	 * Piece Color Pill Pink
 	 */
 	
 	TypePillPink(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MAX), 1, 1, 1, new boolean[][]{
@@ -35,7 +35,7 @@ public enum PillColor {
 	}),
 	
 	/**
-	 * Piece Color PillYllw
+	 * Piece Color Pill Yellow
 	 */
 	
 	TypePillYllw(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][]{
@@ -45,7 +45,7 @@ public enum PillColor {
 	}),
 	
 	/**
-	 * Piece Color PillRed
+	 * Piece Color Pill Red
 	 */
 	
 	TypePillRed(new Color(BoardPanel.COLOR_MAX, BoardPanel.COLOR_MIN, BoardPanel.COLOR_MIN), 1, 1, 1, new boolean[][]{
